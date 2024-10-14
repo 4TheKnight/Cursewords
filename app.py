@@ -8,6 +8,8 @@ from sqlalchemy.orm import sessionmaker, Session
 import secrets
 import os
 from dotenv import load_dotenv
+from fastapi.responses import RedirectResponse
+
 
 load_dotenv()
 Words = os.getenv("Words")
@@ -52,6 +54,10 @@ def get_db():
         yield db
     finally:
         db.close()
+
+@app.get("/favicon.ico")
+async def favicon():
+    return RedirectResponse(url="/static/favicon.ico")
 
 @app.post("/register/")
 def register(username:str,password:str, db:Session = Depends(get_db)):
